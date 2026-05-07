@@ -3,6 +3,8 @@ FROM --platform=$BUILDPLATFORM node:25.9.0-alpine AS node
 
 RUN npm install -g --force corepack && corepack enable
 
+ENV CI=true
+
 WORKDIR /build
 
 # Install dependencies from lock file
@@ -11,7 +13,7 @@ RUN pnpm fetch --ignore-scripts --no-optional
 
 # Copy package.json and install dependencies
 COPY package.json ./
-RUN pnpm install --offline --ignore-scripts --no-optional --config.confirm-modules-purge=false
+RUN pnpm install --offline --ignore-scripts --no-optional
 
 # Copy assets and translations to build
 COPY vite.config.ts tsconfig.json .prettierrc.cjs .npmrc ./
